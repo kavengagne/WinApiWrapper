@@ -20,7 +20,7 @@ namespace WinApiWrapper.Interfaces
         bool HasParent { get; }
         bool IsVisible { get; set; }
         bool IsDesktopWindow { get; }
-        bool IsToolWindow { get; }
+        bool IsToolWindow { get; set; }
 
 
         //========== Methods ==========

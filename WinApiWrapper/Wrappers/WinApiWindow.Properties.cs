@@ -153,6 +153,20 @@ namespace WinApiWrapper.Wrappers
                 return (windowStyles & NativeMethods.Constants.WS_EX_TOOLWINDOW) ==
                        NativeMethods.Constants.WS_EX_TOOLWINDOW;
             }
+            set
+            {
+                var windowStyles = NativeMethods.User32.GetWindowLong(Hwnd, NativeMethods.Enums.GWL.GWL_EXSTYLE);
+                long newStyle;
+                if (value)
+                {
+                    newStyle = windowStyles | NativeMethods.Constants.WS_EX_TOOLWINDOW;
+                }
+                else
+                {
+                    newStyle = windowStyles & ~NativeMethods.Constants.WS_EX_TOOLWINDOW;
+                }
+                NativeMethods.User32.SetWindowLong(Hwnd, NativeMethods.Enums.GWL.GWL_EXSTYLE, (int)newStyle);
+            }
         }
     }
 }
