@@ -20,7 +20,7 @@ namespace WinApiWrapperTestClient
         private void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
-            var windows = WinApiWindow.EnumWindows(win => win.IsDesktopWindow);
+            var windows = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null);
             foreach (var window in windows)
             {
                 listBox1.Items.Add(window.Title);
@@ -30,7 +30,8 @@ namespace WinApiWrapperTestClient
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var windows = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList();
+            var windows =
+                WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList();
 
             textbox1.Text = windows[index].Title;
             listBox2.Items.Clear();
@@ -47,23 +48,23 @@ namespace WinApiWrapperTestClient
         private void button5_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
-            window.BringToTop();
-            button1.PerformClick();
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
+            MessageBox.Show(@"IsToolWindow: " + window.IsToolWindow);
+            //button1.PerformClick();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
-            window.Minimize();
-            button1.PerformClick();
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
+            window.IsToolWindow = !window.IsToolWindow;
+            //button1.PerformClick();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
             window.Close();
             button1.PerformClick();
         }
@@ -71,7 +72,7 @@ namespace WinApiWrapperTestClient
         private void button2_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
             var currentWindow = new WinApiWindow(Handle)
             {
                 Parent = window
@@ -81,21 +82,21 @@ namespace WinApiWrapperTestClient
         private void button6_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
             window.Title = textbox1.Text;
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
             window.IsTopMost = true;
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             var index = listBox1.SelectedIndex;
-            var window = WinApiWindow.EnumWindows(win => win.IsDesktopWindow).ToList()[index];
+            var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
             window.IsTopMost = false;
         }
 
