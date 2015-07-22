@@ -77,14 +77,34 @@ namespace WinApiWrapper.Wrappers
                 {
                     return new Rectangle();
                 }
-                return new Rectangle
-                {
-                    X = rect.Left,
-                    Y = rect.Top,
-                    Width = rect.Right - rect.Left + 1,
-                    Height = rect.Bottom - rect.Top + 1
-                };
+
+                return CreateRectangle(rect);
             }
+        }
+
+        public Rectangle ClientSize
+        {
+            get
+            {
+                NativeMethods.Structs.RECT rect;
+                if (!NativeMethods.User32.GetClientRect(Hwnd, out rect))
+                {
+                    return new Rectangle();
+                }
+
+                return CreateRectangle(rect);
+            }
+        }
+
+        private static Rectangle CreateRectangle(NativeMethods.Structs.RECT rect)
+        {
+            return new Rectangle
+            {
+                X = rect.Left,
+                Y = rect.Top,
+                Width = rect.Right - rect.Left,
+                Height = rect.Bottom - rect.Top
+            };
         }
 
         /// <summary>
