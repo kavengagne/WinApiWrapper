@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using WinApiWrapper.Unsafe;
 
 namespace WinApiWrapper.Interfaces
 {
@@ -15,6 +14,7 @@ namespace WinApiWrapper.Interfaces
         IWinApiWindow Parent { get; set; }
         IntPtr ProcessId { get; }
         Rectangle Size { get; }
+        Rectangle ClientSize { get; }
 
         bool IsTopMost { get; set; }
         bool HasParent { get; }
