@@ -147,6 +147,18 @@ namespace WinApiWrapper.Unsafe
 
             [DllImport("user32.dll")]
             public static extern short GetAsyncKeyState(Enums.VirtualKeys vKey);
+
+            [DllImport("user32.dll")]
+            public static extern int ShowCursor(bool bShow);
+
+            [DllImport("user32.dll")]
+            public static extern bool GetCursorInfo(out Structs.CURSORINFO pci);
+
+            [DllImport("user32.dll")]
+            public static extern bool ScreenToClient(IntPtr hWnd, ref Structs.POINT lpPoint);
+
+            [DllImport("user32.dll")]
+            public static extern bool GetClientRect(IntPtr hWnd, out Structs.RECT lpRect);
         }
     }
 }

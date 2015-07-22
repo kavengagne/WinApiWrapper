@@ -47,9 +47,13 @@
     <Compile Include="Unsafe\NativeMethods.Structs.cs" />
     <Compile Include="Unsafe\NativeMethods.User32.cs" />
     <Compile Include="Interfaces\IWinApiWindow.cs" />
+    <Compile Include="Interfaces\IWinApiMouse.cs" />
+    <Compile Include="Interfaces\IWinApiKeyboard.cs" />
+    <Compile Include="Wrappers\WinApiKeyboard.cs" />
+    <Compile Include="Wrappers\WinApiMouse.cs" />
     <Compile Include="Wrappers\WinApiWindow.Methods.cs" />
     <Compile Include="Wrappers\WinApiWindow.Properties.cs" />
-    <Compile Include="Wrappers\WinApiWindow.cs" />
+    <Compile Include="Wrappers\WinApiWindow.Ctor.cs" />
     <Compile Include="Wrappers\WinApiWindow.Static.cs" />
   </ItemGroup>
   <ItemGroup>

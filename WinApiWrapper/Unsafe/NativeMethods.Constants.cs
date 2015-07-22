@@ -136,6 +136,8 @@ namespace WinApiWrapper.Unsafe
             public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
             public static readonly IntPtr HWND_TOP = new IntPtr(0);
             public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
+            public const Int32 CURSOR_SHOWING = 0x00000001;
         }
     }
 }
