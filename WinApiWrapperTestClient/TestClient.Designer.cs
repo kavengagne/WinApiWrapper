@@ -39,6 +39,9 @@
             this.textbox1 = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.mousePosition = new System.Windows.Forms.TextBox();
+            this.clientPosition = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -145,11 +148,38 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(487, 191);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(124, 23);
+            this.button9.TabIndex = 12;
+            this.button9.Text = "Toggle Mouse Cursor";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // mousePosition
+            // 
+            this.mousePosition.Location = new System.Drawing.Point(756, 493);
+            this.mousePosition.Name = "mousePosition";
+            this.mousePosition.Size = new System.Drawing.Size(118, 20);
+            this.mousePosition.TabIndex = 13;
+            // 
+            // clientPosition
+            // 
+            this.clientPosition.Location = new System.Drawing.Point(756, 522);
+            this.clientPosition.Name = "clientPosition";
+            this.clientPosition.Size = new System.Drawing.Size(118, 20);
+            this.clientPosition.TabIndex = 14;
+            // 
             // TestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 554);
+            this.Controls.Add(this.clientPosition);
+            this.Controls.Add(this.mousePosition);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -163,6 +193,7 @@
             this.Controls.Add(this.textbox1);
             this.Name = "TestClient";
             this.Text = "WinApiWrapper Test Client";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TestClient_FormClosing);
             this.Load += new System.EventHandler(this.TestClient_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -182,6 +213,9 @@
         private System.Windows.Forms.TextBox textbox1;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.TextBox mousePosition;
+        private System.Windows.Forms.TextBox clientPosition;
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using WinApiWrapper.Unsafe;
 using WinApiWrapper.Wrappers;
 
 namespace WinApiWrapperTestClient
@@ -14,7 +15,22 @@ namespace WinApiWrapperTestClient
 
         private void TestClient_Load(object sender, EventArgs e)
         {
-            
+            var timer = new Timer
+            {
+                Interval = 20,
+                Enabled = true
+            };
+            var mouse = new WinApiMouse();
+            timer.Tick += (o, args) =>
+            {
+                mousePosition.BeginInvoke(new Action(() =>
+                {
+                    var position = mouse.Position;
+                    var client = mouse.GetClientPosition(Handle);
+                    mousePosition.Text = String.Format("X: {0}, Y: {1}", position.X, position.Y);
+                    clientPosition.Text = String.Format("X: {0}, Y: {1}", client.X, client.Y);
+                }));
+            };
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -98,6 +114,17 @@ namespace WinApiWrapperTestClient
             var index = listBox1.SelectedIndex;
             var window = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null).ToList()[index];
             window.IsTopMost = false;
+        }
+
+        private void TestClient_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            NativeMethods.User32.ShowCursor(true);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var mouse = new WinApiMouse();
+            mouse.IsVisible = !mouse.IsVisible;
         }
 
     }
