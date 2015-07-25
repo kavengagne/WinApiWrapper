@@ -38,6 +38,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\WinApiMouseButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unsafe\NativeMethods.Advapi32.cs" />
     <Compile Include="Unsafe\NativeMethods.Constants.cs" />
@@ -49,6 +50,9 @@
     <Compile Include="Interfaces\IWinApiWindow.cs" />
     <Compile Include="Interfaces\IWinApiMouse.cs" />
     <Compile Include="Interfaces\IWinApiKeyboard.cs" />
+    <Compile Include="Mappers\MouseWindowMessagesMapper.cs" />
+    <Compile Include="Mappers\MouseEventMessagesMapper.cs" />
+    <Compile Include="Mappers\MapperBase.cs" />
     <Compile Include="Wrappers\WinApiKeyboard.cs" />
     <Compile Include="Wrappers\WinApiMouse.cs" />
     <Compile Include="Wrappers\WinApiWindow.Methods.cs" />

@@ -159,6 +159,17 @@ namespace WinApiWrapper.Unsafe
 
             [DllImport("user32.dll")]
             public static extern bool GetClientRect(IntPtr hWnd, out Structs.RECT lpRect);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool SetCursorPos(int X, int Y);
+
+            [DllImport("user32.dll")]
+            public static extern uint SendInput(
+                uint nInputs, [MarshalAs(UnmanagedType.LPArray), In] Structs.INPUT[] pInputs, int cbSize);
+
+            [DllImport("user32.dll")]
+            public static extern void mouse_event(Enums.MOUSEEVENTF dwFlags, uint dx, uint dy, uint dwData, int dwExtraInfo);
         }
     }
 }

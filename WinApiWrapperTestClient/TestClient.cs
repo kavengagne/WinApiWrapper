@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using WinApiWrapper.Enums;
 using WinApiWrapper.Unsafe;
 using WinApiWrapper.Wrappers;
 
@@ -125,6 +127,12 @@ namespace WinApiWrapperTestClient
         {
             var mouse = new WinApiMouse();
             mouse.IsVisible = !mouse.IsVisible;
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            var mouse = new WinApiMouse();
+            mouse.PerformClick(WinApiMouseButton.Left, new Point(500, 550));
         }
 
     }
