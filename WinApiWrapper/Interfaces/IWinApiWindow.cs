@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Drawing;
 
+
 namespace WinApiWrapper.Interfaces
 {
     public interface IWinApiWindow
     {
         // ========== Properties ==========
         IntPtr Hwnd { get; }
-        
+
         string Title { get; set; }
         string ClassName { get; }
         IWinApiWindow Parent { get; set; }
         IntPtr ProcessId { get; }
-        Rectangle Size { get; }
+        Rectangle Size { get; set; }
         Rectangle ClientSize { get; }
 
         bool IsTopMost { get; set; }
@@ -25,16 +26,21 @@ namespace WinApiWrapper.Interfaces
 
         //========== Methods ==========
         void Show();
+
         void Hide();
 
         void BringToTop();
+
         void Minimize();
+
         void Close();
 
         IntPtr GetProperty(string propertyName);
+
         bool SetProperty(string propertyName, IntPtr propertyValue);
+
         void RemoveProperty(string propertyName);
-        
+
         IEnumerable<IWinApiWindow> GetChildWindows(Predicate<IWinApiWindow> condition = null);
     }
 }

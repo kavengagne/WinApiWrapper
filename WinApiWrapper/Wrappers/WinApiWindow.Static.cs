@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using WinApiWrapper.Interfaces;
-using WinApiWrapper.Unsafe;
+using WinApiWrapper.Native.Delegates;
+using WinApiWrapper.Native.Enums;
+using WinApiWrapper.Native.Methods;
+
 
 namespace WinApiWrapper.Wrappers
 {
@@ -11,7 +14,7 @@ namespace WinApiWrapper.Wrappers
         public static IEnumerable<IWinApiWindow> EnumWindows(Predicate<IWinApiWindow> condition = null)
         {
             var windowsList = new List<IWinApiWindow>();
-            NativeMethods.User32.EnumWindowsProc windowEnumDelegate = (wnd, param) =>
+            EnumWindowsProc windowEnumDelegate = (wnd, param) =>
             {
                 var window = new WinApiWindow(wnd);
                 if (condition == null || condition.Invoke(window))
@@ -20,14 +23,14 @@ namespace WinApiWrapper.Wrappers
                 }
                 return true;
             };
-            NativeMethods.User32.EnumWindows(windowEnumDelegate, IntPtr.Zero);
+            User32.EnumWindows(windowEnumDelegate, IntPtr.Zero);
             return windowsList;
         }
 
         public static IEnumerable<IWinApiWindow> EnumChildWindows(IntPtr hWnd, Predicate<IWinApiWindow> condition = null)
         {
             var windowsList = new List<IWinApiWindow>();
-            NativeMethods.User32.EnumWindowsProc windowEnumDelegate = (wnd, param) =>
+            EnumWindowsProc windowEnumDelegate = (wnd, param) =>
             {
                 var window = new WinApiWindow(wnd);
                 if (condition == null || condition.Invoke(window))
@@ -36,20 +39,20 @@ namespace WinApiWrapper.Wrappers
                 }
                 return true;
             };
-            NativeMethods.User32.EnumChildWindows(hWnd, windowEnumDelegate, IntPtr.Zero);
+            User32.EnumChildWindows(hWnd, windowEnumDelegate, IntPtr.Zero);
             return windowsList;
         }
 
         public static IWinApiWindow CreateWindow()
         {
-            var hwnd = NativeMethods.User32.CreateWindowEx(NativeMethods.Enums.WindowStylesEx.WS_EX_OVERLAPPEDWINDOW,
-                                                           "KAVEN_WINDOW", "KAVEN WINDOW",
-                                                           NativeMethods.Enums.WindowStyles.WS_OVERLAPPEDWINDOW, 0, 0,
-                                                           200, 200,
-                                                           IntPtr.Zero, IntPtr.Zero, Process.GetCurrentProcess().Handle,
-                                                           IntPtr.Zero);
+            var hwnd = User32.CreateWindowEx(WindowStylesEx.WS_EX_OVERLAPPEDWINDOW,
+                                             "KAVEN_WINDOW", "KAVEN WINDOW",
+                                             WindowStyles.WS_OVERLAPPEDWINDOW, 0, 0,
+                                             200, 200,
+                                             IntPtr.Zero, IntPtr.Zero, Process.GetCurrentProcess().Handle,
+                                             IntPtr.Zero);
 
-            NativeMethods.User32.ShowWindow(hwnd, NativeMethods.Enums.ShowWindowCommands.Show);
+            User32.ShowWindow(hwnd, ShowWindowCommands.Show);
 
             // TODO: KG - Implement correct window creation
             return new WinApiWindow(IntPtr.Zero);
@@ -57,12 +60,32 @@ namespace WinApiWrapper.Wrappers
 
         public static IWinApiWindow GetDesktopWindow()
         {
-            return new WinApiWindow(NativeMethods.User32.GetDesktopWindow());
+            return new WinApiWindow(User32.GetDesktopWindow());
         }
 
         public static IWinApiWindow GetForegroundWindow()
         {
-            return new WinApiWindow(NativeMethods.User32.GetForegroundWindow());
+            return new WinApiWindow(User32.GetForegroundWindow());
+        }
+
+        public static IWinApiWindow FindByName(string title)
+        {
+            return Find(null, title);
+        }
+
+        public static IWinApiWindow FindByClassName(string className)
+        {
+            return Find(className, null);
+        }
+
+        public static IWinApiWindow Find(string classNameOrNull, string titleOrNull)
+        {
+            var hwnd = User32.FindWindow(classNameOrNull, titleOrNull);
+            if (hwnd != IntPtr.Zero)
+            {
+                return new WinApiWindow(hwnd);
+            }
+            return null;
         }
     }
 }

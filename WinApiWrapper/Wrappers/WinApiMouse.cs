@@ -4,7 +4,11 @@ using System.Runtime.InteropServices;
 using WinApiWrapper.Enums;
 using WinApiWrapper.Interfaces;
 using WinApiWrapper.Mappers;
-using WinApiWrapper.Unsafe;
+using WinApiWrapper.Native.Constants;
+using WinApiWrapper.Native.Enums;
+using WinApiWrapper.Native.Methods;
+using WinApiWrapper.Native.Structs;
+
 
 namespace WinApiWrapper.Wrappers
 {
@@ -24,9 +28,9 @@ namespace WinApiWrapper.Wrappers
         {
             get
             {
-                NativeMethods.Structs.CURSORINFO pci;
-                pci.cbSize = Marshal.SizeOf(typeof(NativeMethods.Structs.CURSORINFO));
-                NativeMethods.User32.GetCursorInfo(out pci);
+                CURSORINFO pci;
+                pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+                User32.GetCursorInfo(out pci);
                 return new Point(pci.ptScreenPos.x, pci.ptScreenPos.y);
             }
         }
@@ -34,23 +38,20 @@ namespace WinApiWrapper.Wrappers
         public int X
         {
             get { return Position.X; }
+            set { User32.SetCursorPos(value, Position.Y); }
         }
 
         public int Y
         {
             get { return Position.Y; }
-            set { NativeMethods.User32.SetCursorPos(Position.X, value); }
+            set { User32.SetCursorPos(Position.X, value); }
         }
 
-        public bool IsLeftButtonDown
-        {
-            get { return NativeMethods.User32.GetAsyncKeyState(NativeMethods.Enums.VirtualKeys.LBUTTON) < 0; }
-        }
+        public bool IsLeftButtonDown => User32.GetAsyncKeyState(VirtualKeys.LBUTTON) < 0;
 
-        public bool IsRightButtonDown
-        {
-            get { return NativeMethods.User32.GetAsyncKeyState(NativeMethods.Enums.VirtualKeys.RBUTTON) < 0; }
-        }
+        public bool IsMiddleButtonDown => User32.GetAsyncKeyState(VirtualKeys.MBUTTON) < 0;
+
+        public bool IsRightButtonDown => User32.GetAsyncKeyState(VirtualKeys.RBUTTON) < 0;
 
         public Point GetClientPosition(IWinApiWindow clientWindow)
         {
@@ -59,11 +60,11 @@ namespace WinApiWrapper.Wrappers
 
         public Point GetClientPosition(IntPtr hwnd)
         {
-            NativeMethods.Structs.CURSORINFO pci;
-            pci.cbSize = Marshal.SizeOf(typeof(NativeMethods.Structs.CURSORINFO));
-            NativeMethods.User32.GetCursorInfo(out pci);
+            CURSORINFO pci;
+            pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+            User32.GetCursorInfo(out pci);
 
-            NativeMethods.User32.ScreenToClient(hwnd, ref pci.ptScreenPos);
+            User32.ScreenToClient(hwnd, ref pci.ptScreenPos);
             return new Point(pci.ptScreenPos.x, pci.ptScreenPos.y);
         }
 
@@ -73,37 +74,37 @@ namespace WinApiWrapper.Wrappers
         {
             get
             {
-                NativeMethods.Structs.CURSORINFO pci;
-                pci.cbSize = Marshal.SizeOf(typeof(NativeMethods.Structs.CURSORINFO));
-                NativeMethods.User32.GetCursorInfo(out pci);
-                return pci.flags == NativeMethods.Constants.CURSOR_SHOWING;
+                CURSORINFO pci;
+                pci.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+                User32.GetCursorInfo(out pci);
+                return pci.flags == Others.CURSOR_SHOWING;
             }
-            set { NativeMethods.User32.ShowCursor(value); }
+            set { User32.ShowCursor(value); }
         }
 
         public void SetPosition(Point position)
         {
-            NativeMethods.User32.SetCursorPos(position.X, position.Y);
+            User32.SetCursorPos(position.X, position.Y);
         }
 
         public void SetX(int x)
         {
-            NativeMethods.User32.SetCursorPos(x, Position.Y);
+            User32.SetCursorPos(x, Position.Y);
         }
 
         public void SetY(int y)
         {
-            NativeMethods.User32.SetCursorPos(Position.X, y);
+            User32.SetCursorPos(Position.X, y);
         }
 
         public void Show()
         {
-            NativeMethods.User32.ShowCursor(true);
+            User32.ShowCursor(true);
         }
 
         public void Hide()
         {
-            NativeMethods.User32.ShowCursor(false);
+            User32.ShowCursor(false);
         }
 
 
@@ -115,8 +116,8 @@ namespace WinApiWrapper.Wrappers
             {
                 var savedPosition = Position;
                 SetPosition(position);
-                NativeMethods.User32.mouse_event(mouseEventMessages.Item1, 0, 0, 0, 0);
-                NativeMethods.User32.mouse_event(mouseEventMessages.Item2, 0, 0, 0, 0);
+                User32.mouse_event(mouseEventMessages.Item1, 0, 0, 0, 0);
+                User32.mouse_event(mouseEventMessages.Item2, 0, 0, 0, 0);
                 SetPosition(savedPosition);
             }
         }
@@ -126,18 +127,18 @@ namespace WinApiWrapper.Wrappers
             PerformClick(mouseButton, new Point(x, y));
         }
 
-        public void PerformClick(WinApiMouseButton mouseButton, IntPtr hwnd, Point position)
+        public void PerformClick(WinApiMouseButton mouseButton, Point position, IntPtr hwnd)
         {
             var windowMessages = _mouseWindowMapper.Map(mouseButton);
-            NativeMethods.User32.SendMessage(hwnd, (uint)windowMessages.Item1, new IntPtr(1),
+            User32.SendMessage(hwnd, (uint)windowMessages.Item1, new IntPtr(1),
                                              new IntPtr(position.Y * 65536 + position.X));
-            NativeMethods.User32.SendMessage(hwnd, (uint)windowMessages.Item2, new IntPtr(0),
+            User32.SendMessage(hwnd, (uint)windowMessages.Item2, new IntPtr(0),
                                              new IntPtr(position.Y * 65536 + position.X));
         }
 
-        public void PerformClick(WinApiMouseButton mouseButton, IntPtr hwnd, int x, int y)
+        public void PerformClick(WinApiMouseButton mouseButton, int x, int y, IntPtr hwnd)
         {
-            PerformClick(mouseButton, hwnd, new Point(x, y));
+            PerformClick(mouseButton, new Point(x, y), hwnd);
         }
     }
 }

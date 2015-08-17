@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WinApiWrapper.Enums;
-using WinApiWrapper.Unsafe;
+using WinApiWrapper.Native.Methods;
 using WinApiWrapper.Wrappers;
 
 namespace WinApiWrapperTestClient
@@ -120,7 +120,7 @@ namespace WinApiWrapperTestClient
 
         private void TestClient_FormClosing(object sender, FormClosingEventArgs e)
         {
-            NativeMethods.User32.ShowCursor(true);
+            User32.ShowCursor(true);
         }
 
         private void button9_Click(object sender, EventArgs e)

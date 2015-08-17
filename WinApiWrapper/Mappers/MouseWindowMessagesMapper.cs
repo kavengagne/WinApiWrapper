@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using WinApiWrapper.Enums;
-using WinApiWrapper.Unsafe;
+using WinApiWrapper.Native.Enums;
+
 
 namespace WinApiWrapper.Mappers
 {
     public class MouseWindowMessagesMapper :
-        MapperBase<WinApiMouseButton, Tuple<NativeMethods.Enums.WindowMessages, NativeMethods.Enums.WindowMessages>>
+        MapperBase<WinApiMouseButton, Tuple<WindowMessages, WindowMessages>>
     {
         public MouseWindowMessagesMapper()
         {
             Mappings = new Dictionary
-                <WinApiMouseButton, Tuple<NativeMethods.Enums.WindowMessages, NativeMethods.Enums.WindowMessages>>
+                <WinApiMouseButton, Tuple<WindowMessages, WindowMessages>>
             {
                 {
                     WinApiMouseButton.Left,
-                    Tuple.Create(NativeMethods.Enums.WindowMessages.LBUTTONDOWN,
-                                 NativeMethods.Enums.WindowMessages.LBUTTONUP)
+                    Tuple.Create(WindowMessages.LBUTTONDOWN, WindowMessages.LBUTTONUP)
                 },
                 {
                     WinApiMouseButton.Right,
-                    Tuple.Create(NativeMethods.Enums.WindowMessages.RBUTTONDOWN,
-                                 NativeMethods.Enums.WindowMessages.RBUTTONUP)
+                    Tuple.Create(WindowMessages.RBUTTONDOWN, WindowMessages.RBUTTONUP)
                 }
             };
         }

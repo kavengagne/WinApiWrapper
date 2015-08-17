@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+
 namespace WinApiWrapper.Mappers
 {
     public abstract class MapperBase<TFrom, TTo> where TFrom : struct where TTo : class

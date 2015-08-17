@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using WinApiWrapper.Interfaces;
-using WinApiWrapper.Unsafe;
+using WinApiWrapper.Native.Enums;
+using WinApiWrapper.Native.Methods;
+
 
 namespace WinApiWrapper.Wrappers
 {
@@ -12,7 +14,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public void Show()
         {
-            NativeMethods.User32.ShowWindow(Hwnd, NativeMethods.Enums.ShowWindowCommands.Show);
+            User32.ShowWindow(Hwnd, ShowWindowCommands.Show);
         }
 
         /// <summary>
@@ -20,7 +22,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public void Hide()
         {
-            NativeMethods.User32.ShowWindow(Hwnd, NativeMethods.Enums.ShowWindowCommands.Hide);
+            User32.ShowWindow(Hwnd, ShowWindowCommands.Hide);
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public void BringToTop()
         {
-            NativeMethods.User32.BringWindowToTop(Hwnd);
+            User32.BringWindowToTop(Hwnd);
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public void Minimize()
         {
-            NativeMethods.User32.CloseWindow(Hwnd);
+            User32.CloseWindow(Hwnd);
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public void Close()
         {
-            NativeMethods.User32.DestroyWindow(Hwnd);
+            User32.DestroyWindow(Hwnd);
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace WinApiWrapper.Wrappers
         /// <returns></returns>
         public IntPtr GetProperty(string propertyName)
         {
-            return NativeMethods.User32.GetProp(Hwnd, propertyName);
+            return User32.GetProp(Hwnd, propertyName);
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace WinApiWrapper.Wrappers
         /// <returns></returns>
         public bool SetProperty(string propertyName, IntPtr propertyValue)
         {
-            return NativeMethods.User32.SetProp(Hwnd, propertyName, propertyValue);
+            return User32.SetProp(Hwnd, propertyName, propertyValue);
         }
 
         /// <summary>
@@ -77,7 +79,7 @@ namespace WinApiWrapper.Wrappers
         /// <param name="propertyName">The name of the property.</param>
         public void RemoveProperty(string propertyName)
         {
-            NativeMethods.User32.RemoveProp(Hwnd, propertyName);
+            User32.RemoveProp(Hwnd, propertyName);
         }
 
         public IEnumerable<IWinApiWindow> GetChildWindows(Predicate<IWinApiWindow> condition = null)

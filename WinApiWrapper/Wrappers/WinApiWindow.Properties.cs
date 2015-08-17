@@ -2,7 +2,11 @@
 using System.Drawing;
 using System.Text;
 using WinApiWrapper.Interfaces;
-using WinApiWrapper.Unsafe;
+using WinApiWrapper.Native.Constants;
+using WinApiWrapper.Native.Enums;
+using WinApiWrapper.Native.Methods;
+using WinApiWrapper.Native.Structs;
+
 
 namespace WinApiWrapper.Wrappers
 {
@@ -21,7 +25,7 @@ namespace WinApiWrapper.Wrappers
             get
             {
                 var data = new StringBuilder(4096);
-                var messageResult = NativeMethods.User32.SendMessage(Hwnd, NativeMethods.Constants.WM_GETTEXT,
+                var messageResult = User32.SendMessage(Hwnd, (uint)WindowMessages.GETTEXT,
                                                                      data.Capacity + 1, data);
                 if (messageResult != 0)
                 {
@@ -31,7 +35,7 @@ namespace WinApiWrapper.Wrappers
             }
             set
             {
-                NativeMethods.User32.SendMessage(Hwnd, NativeMethods.Constants.WM_SETTEXT, 0, new StringBuilder(value));
+                User32.SendMessage(Hwnd, (uint)WindowMessages.SETTEXT, 0, new StringBuilder(value));
             }
         }
 
@@ -43,7 +47,7 @@ namespace WinApiWrapper.Wrappers
             get
             {
                 var data = new StringBuilder(4096);
-                if (NativeMethods.User32.GetClassName(Hwnd, data, data.Capacity + 1) != 0)
+                if (User32.GetClassName(Hwnd, data, data.Capacity + 1) != 0)
                 {
                     return data.ToString();
                 }
@@ -56,38 +60,35 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public IWinApiWindow Parent
         {
-            get { return new WinApiWindow(NativeMethods.User32.GetParent(Hwnd)); }
-            set { NativeMethods.User32.SetParent(Hwnd, value.Hwnd); }
+            get { return new WinApiWindow(User32.GetParent(Hwnd)); }
+            set { User32.SetParent(Hwnd, value.Hwnd); }
         }
 
         /// <summary>
         ///  The identifier of the thread that created the window.
         /// </summary>
-        public IntPtr ProcessId
-        {
-            get { return NativeMethods.User32.GetWindowThreadProcessId(Hwnd, IntPtr.Zero); }
-        }
+        public IntPtr ProcessId => User32.GetWindowThreadProcessId(Hwnd, IntPtr.Zero);
 
         public Rectangle Size
         {
             get
             {
-                NativeMethods.Structs.RECT rect;
-                if (!NativeMethods.User32.GetWindowRect(Hwnd, out rect))
+                RECT rect;
+                if (!User32.GetWindowRect(Hwnd, out rect))
                 {
                     return new Rectangle();
                 }
-
                 return CreateRectangle(rect);
             }
+            set { User32.MoveWindow(Hwnd, value.X, value.Y, value.Width, value.Height, true); }
         }
 
         public Rectangle ClientSize
         {
             get
             {
-                NativeMethods.Structs.RECT rect;
-                if (!NativeMethods.User32.GetClientRect(Hwnd, out rect))
+                RECT rect;
+                if (!User32.GetClientRect(Hwnd, out rect))
                 {
                     return new Rectangle();
                 }
@@ -96,7 +97,7 @@ namespace WinApiWrapper.Wrappers
             }
         }
 
-        private static Rectangle CreateRectangle(NativeMethods.Structs.RECT rect)
+        private static Rectangle CreateRectangle(RECT rect)
         {
             return new Rectangle
             {
@@ -114,33 +115,28 @@ namespace WinApiWrapper.Wrappers
         {
             get
             {
-                var windowStyles = NativeMethods.User32.GetWindowLong(Hwnd, NativeMethods.Enums.GWL.GWL_EXSTYLE);
-                return (windowStyles & NativeMethods.Constants.WS_EX_TOPMOST) == NativeMethods.Constants.WS_EX_TOPMOST;
+                var windowStyles = User32.GetWindowLong(Hwnd, GetWindowLong.GWL_EXSTYLE);
+                return (windowStyles & (uint)WindowStylesEx.WS_EX_TOPMOST) == (uint)WindowStylesEx.WS_EX_TOPMOST;
             }
             set
             {
-                var desiredState = value ? NativeMethods.Constants.HWND_TOPMOST : NativeMethods.Constants.HWND_NOTOPMOST;
-                NativeMethods.User32.SetWindowPos(
-                    Hwnd, desiredState, 0, 0, 0, 0,
-                    NativeMethods.Enums.SetWindowPosFlags.IgnoreMove |
-                    NativeMethods.Enums.SetWindowPosFlags.IgnoreResize);
+                var desiredState = value ? WindowOrder.HWND_TOPMOST : WindowOrder.HWND_NOTOPMOST;
+                User32.SetWindowPos(Hwnd, desiredState, 0, 0, 0, 0,
+                                    SetWindowPosFlags.IgnoreMove | SetWindowPosFlags.IgnoreResize);
             }
         }
 
         /// <summary>
         /// A boolean value indicating if the window has a parent.
         /// </summary>
-        public bool HasParent
-        {
-            get { return Parent.Hwnd != IntPtr.Zero; }
-        }
+        public bool HasParent => Parent.Hwnd != IntPtr.Zero;
 
         /// <summary>
         /// Indicates if the window is visible
         /// </summary>
         public bool IsVisible
         {
-            get { return NativeMethods.User32.IsWindowVisible(Hwnd); }
+            get { return User32.IsWindowVisible(Hwnd); }
             set
             {
                 if (value)
@@ -157,10 +153,7 @@ namespace WinApiWrapper.Wrappers
         /// <summary>
         /// Indicates if the window is a top-level desktop window.
         /// </summary>
-        public bool IsDesktopWindow
-        {
-            get { return !HasParent && !IsToolWindow && IsVisible; }
-        }
+        public bool IsDesktopWindow => !HasParent && !IsToolWindow && IsVisible;
 
         /// <summary>
         /// Indicates if the windows is a tool window.
@@ -169,23 +162,23 @@ namespace WinApiWrapper.Wrappers
         {
             get
             {
-                var windowStyles = NativeMethods.User32.GetWindowLong(Hwnd, NativeMethods.Enums.GWL.GWL_EXSTYLE);
-                return (windowStyles & NativeMethods.Constants.WS_EX_TOOLWINDOW) ==
-                       NativeMethods.Constants.WS_EX_TOOLWINDOW;
+                var windowStyles = User32.GetWindowLong(Hwnd, GetWindowLong.GWL_EXSTYLE);
+                return (windowStyles & (uint)WindowStylesEx.WS_EX_TOOLWINDOW) ==
+                       (uint)WindowStylesEx.WS_EX_TOOLWINDOW;
             }
             set
             {
-                var windowStyles = NativeMethods.User32.GetWindowLong(Hwnd, NativeMethods.Enums.GWL.GWL_EXSTYLE);
+                var windowStyles = User32.GetWindowLong(Hwnd, GetWindowLong.GWL_EXSTYLE);
                 long newStyle;
                 if (value)
                 {
-                    newStyle = windowStyles | NativeMethods.Constants.WS_EX_TOOLWINDOW;
+                    newStyle = windowStyles | (uint)WindowStylesEx.WS_EX_TOOLWINDOW;
                 }
                 else
                 {
-                    newStyle = windowStyles & ~NativeMethods.Constants.WS_EX_TOOLWINDOW;
+                    newStyle = windowStyles & (uint)~WindowStylesEx.WS_EX_TOOLWINDOW;
                 }
-                NativeMethods.User32.SetWindowLong(Hwnd, NativeMethods.Enums.GWL.GWL_EXSTYLE, (int)newStyle);
+                User32.SetWindowLong(Hwnd, GetWindowLong.GWL_EXSTYLE, (int)newStyle);
             }
         }
     }

@@ -2,7 +2,8 @@
 {
     public enum WinApiMouseButton
     {
-        Left = 0x01,
-        Right = 0x02
+        Left = 0,
+        Right = 1,
+        Middle = 2
     }
 }
