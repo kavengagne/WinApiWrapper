@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 using WinApiWrapper.Native.Delegates;
+using WinApiWrapper.Native.Enums;
+using WinApiWrapper.Native.Structs;
 
 
 namespace WinApiWrapper.Native.Methods
@@ -23,5 +25,16 @@ namespace WinApiWrapper.Native.Methods
         [return: MarshalAs(UnmanagedType.Bool)]
         [DllImport("user32.dll")]
         public static extern bool UnhookWinEvent(IntPtr eventHookHandle);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        // overload for use with LowLevelKeyboardProc
+        [DllImport("user32.dll")]
+        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, WindowMessage wParam, [In]KBDLLHOOKSTRUCT lParam);
+
+        // overload for use with LowLevelMouseProc
+        [DllImport("user32.dll")]
+        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, WindowMessage wParam, [In]MSLLHOOKSTRUCT lParam);
     }
 }

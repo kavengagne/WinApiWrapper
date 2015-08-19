@@ -5,7 +5,7 @@ using System;
 
 namespace WinApiWrapper.Native.Enums
 {
-    public enum WindowMessages : uint
+    public enum WindowMessage : uint
     {
         NULL = 0x0000,
         CREATE = 0x0001,

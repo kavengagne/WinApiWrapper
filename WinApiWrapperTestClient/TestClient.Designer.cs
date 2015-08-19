@@ -43,6 +43,9 @@
             this.mousePosition = new System.Windows.Forms.TextBox();
             this.clientPosition = new System.Windows.Forms.TextBox();
             this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.clipCursor = new System.Windows.Forms.TextBox();
+            this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -183,11 +186,41 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(487, 249);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(83, 23);
+            this.button11.TabIndex = 16;
+            this.button11.Text = "GetClipCursor";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // clipCursor
+            // 
+            this.clipCursor.Location = new System.Drawing.Point(576, 251);
+            this.clipCursor.Name = "clipCursor";
+            this.clipCursor.Size = new System.Drawing.Size(220, 20);
+            this.clipCursor.TabIndex = 17;
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(487, 278);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(83, 23);
+            this.button12.TabIndex = 18;
+            this.button12.Text = "ClipCursor";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
             // TestClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(886, 554);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.clipCursor);
+            this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.clientPosition);
             this.Controls.Add(this.mousePosition);
@@ -229,6 +262,9 @@
         private System.Windows.Forms.TextBox mousePosition;
         private System.Windows.Forms.TextBox clientPosition;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.TextBox clipCursor;
+        private System.Windows.Forms.Button button12;
     }
 }
 

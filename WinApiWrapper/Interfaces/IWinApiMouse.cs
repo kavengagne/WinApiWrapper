@@ -43,16 +43,32 @@ namespace WinApiWrapper.Interfaces
 
 
         #region Actions
-        void PerformClick(WinApiMouseButton mouseButton, Point position);
+        void PerformClick(MouseButton mouseButton, Point position);
 
-        void PerformClick(WinApiMouseButton mouseButton, int x, int y);
+        void PerformClick(MouseButton mouseButton, int x, int y);
 
-        void PerformClick(WinApiMouseButton mouseButton, Point position, IntPtr hwnd);
+        void PerformClick(MouseButton mouseButton, Point position, IntPtr hwnd);
 
-        void PerformClick(WinApiMouseButton mouseButton, int x, int y, IntPtr hwnd);
-
-
+        void PerformClick(MouseButton mouseButton, int x, int y, IntPtr hwnd);
         #endregion Actions
+
+
+        #region Hooks
+        // TODO: KG - Test all Hooks properly
+        Guid RegisterMoveHook(Action<Point> hookMethod);
+        bool UnregisterMoveHook(Guid hookGuid);
+        void UnregisterAllMoveHooks();
+
+        Guid RegisterButtonHook(MouseButtonAction buttonAction, Action<MouseButton> hookMethod);
+        bool UnregisterButtonHook(Guid hookGuid);
+        void UnregisterAllButtonHooks();
+
+        Guid RegisterWheelHook(MouseWheelOrientation wheelOrientation, Action<int> hookMethod);
+        bool UnregisterWheelHook(Guid hookGuid);
+        void UnregisterAllWheelHooks();
+
+        void UnregisterAllHooks();
+        #endregion Hooks
     }
 }
 

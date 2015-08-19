@@ -25,7 +25,7 @@ namespace WinApiWrapper.Wrappers
             get
             {
                 var data = new StringBuilder(4096);
-                var messageResult = User32.SendMessage(Hwnd, (uint)WindowMessages.GETTEXT,
+                var messageResult = User32.SendMessage(Hwnd, (uint)WindowMessage.GETTEXT,
                                                                      data.Capacity + 1, data);
                 if (messageResult != 0)
                 {
@@ -35,7 +35,7 @@ namespace WinApiWrapper.Wrappers
             }
             set
             {
-                User32.SendMessage(Hwnd, (uint)WindowMessages.SETTEXT, 0, new StringBuilder(value));
+                User32.SendMessage(Hwnd, (uint)WindowMessage.SETTEXT, 0, new StringBuilder(value));
             }
         }
 

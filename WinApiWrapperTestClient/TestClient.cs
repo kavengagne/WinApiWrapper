@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WinApiWrapper.Enums;
 using WinApiWrapper.Native.Methods;
+using WinApiWrapper.Native.Structs;
 using WinApiWrapper.Wrappers;
 
 namespace WinApiWrapperTestClient
 {
     public partial class TestClient : Form
     {
+        private bool _clipped;
+
         public TestClient()
         {
             InitializeComponent();
@@ -131,9 +135,41 @@ namespace WinApiWrapperTestClient
 
         private void button10_Click(object sender, EventArgs e)
         {
+            //GC.Collect();
+            //__mouse.UnregisterAllHooks();
+
             var mouse = new WinApiMouse();
-            mouse.PerformClick(WinApiMouseButton.Left, new Point(500, 550));
+            mouse.PerformClick(MouseButton.Left, new Point(500, 550));
         }
 
+        private WinApiMouse __mouse = new WinApiMouse();
+        private void button11_Click(object sender, EventArgs e)
+        {
+            //__mouse.RegisterButtonHook(MouseButtonAction.Down, button => Debug.WriteLine("Down " + button));
+            //__mouse.RegisterButtonHook(MouseButtonAction.Up, button => Debug.WriteLine("Up " + button));
+            //__mouse.RegisterMoveHook(point => Debug.WriteLine("Move: " + point));
+            //__mouse.RegisterWheelHook(MouseWheelOrientation.Horizontal, i => Debug.WriteLine("HWheel: " + i));
+            //__mouse.RegisterWheelHook(MouseWheelOrientation.Vertical, i => Debug.WriteLine("VWheel: " + i));
+
+            RECT rect;
+            User32.GetClipCursor(out rect);
+            clipCursor.Text = rect.ToString();
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            if (_clipped)
+            {
+                _clipped = false;
+                RECT clipZone = new RECT();
+                User32.ClipCursor(ref clipZone);
+            }
+            else
+            {
+                _clipped = true;
+                var clipZone = new RECT(Left, Top, Right, Bottom);
+                User32.ClipCursor(ref clipZone);
+            }
+        }
     }
 }

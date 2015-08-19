@@ -27,5 +27,11 @@ namespace WinApiWrapper.Native.Methods
         [DllImport("user32.dll")]
         public static extern void mouse_event(MouseEventF dwFlags, uint dx, uint dy, uint dwData,
                                               int dwExtraInfo);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetClipCursor(out RECT lpRect);
+
+        [DllImport("user32.dll")]
+        public static extern bool ClipCursor(ref RECT lpRect);
     }
 }

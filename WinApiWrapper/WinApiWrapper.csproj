@@ -38,7 +38,9 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\WinApiMouseButton.cs" />
+    <Compile Include="Enums\MouseButton.cs" />
+    <Compile Include="Enums\MouseButtonAction.cs" />
+    <Compile Include="Enums\MouseWheelOrientation.cs" />
     <Compile Include="Native\Enums\StandardRights.cs" />
     <Compile Include="Native\Enums\FileAttributes.cs" />
     <Compile Include="Native\Enums\FileShareModes.cs" />
@@ -63,7 +65,7 @@
     <Compile Include="Native\Enums\ShowWindowCommands.cs" />
     <Compile Include="Native\Enums\SnapshotFlags.cs" />
     <Compile Include="Native\Enums\VirtualKeys.cs" />
-    <Compile Include="Native\Enums\WindowMessages.cs" />
+    <Compile Include="Native\Enums\WindowMessage.cs" />
     <Compile Include="Native\Enums\WindowStyles.cs" />
     <Compile Include="Native\Enums\WindowStylesEx.cs" />
     <Compile Include="Native\Methods\User32.Hooks.cs" />
@@ -73,9 +75,12 @@
     <Compile Include="Native\Structs\HARDWAREINPUT.cs" />
     <Compile Include="Native\Structs\INPUT.cs" />
     <Compile Include="Native\Structs\InputUnion.cs" />
+    <Compile Include="Native\Structs\KBDLLHOOKSTRUCT.cs" />
+    <Compile Include="Native\Structs\KBDLLHOOKSTRUCTFlags.cs" />
     <Compile Include="Native\Structs\LUID.cs" />
     <Compile Include="Native\Structs\LUID_AND_ATTRIBUTES.cs" />
     <Compile Include="Native\Structs\MOUSEINPUT.cs" />
+    <Compile Include="Native\Structs\MSLLHOOKSTRUCT.cs" />
     <Compile Include="Native\Structs\NTSTATUS.cs" />
     <Compile Include="Native\Structs\POINT.cs" />
     <Compile Include="Native\Structs\PROCESSENTRY32.cs" />
@@ -94,9 +99,11 @@
     <Compile Include="Interfaces\IWinApiWindow.cs" />
     <Compile Include="Interfaces\IWinApiMouse.cs" />
     <Compile Include="Interfaces\IWinApiKeyboard.cs" />
-    <Compile Include="Mappers\MouseWindowMessagesMapper.cs" />
-    <Compile Include="Mappers\MouseEventMessagesMapper.cs" />
-    <Compile Include="Mappers\MapperBase.cs" />
+    <Compile Include="Internal\Hooks\ButtonHook.cs" />
+    <Compile Include="Internal\Mappers\MouseMessagesTranslator.cs" />
+    <Compile Include="Internal\Mappers\MouseMessagesMappings.cs" />
+    <Compile Include="Internal\Hooks\WheelHook.cs" />
+    <Compile Include="Internal\Hooks\MoveHook.cs" />
     <Compile Include="Wrappers\WinApiKeyboard.cs" />
     <Compile Include="Wrappers\WinApiMouse.cs" />
     <Compile Include="Wrappers\WinApiWindow.Methods.cs" />
