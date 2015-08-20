@@ -97,7 +97,6 @@
     <Compile Include="Native\Structs\KEYBDINPUT.cs" />
     <Compile Include="Native\Methods\User32.Windows.cs" />
     <Compile Include="Interfaces\IWinApiWindow.cs" />
-    <Compile Include="Interfaces\IWinApiMouse.cs" />
     <Compile Include="Interfaces\IWinApiKeyboard.cs" />
     <Compile Include="Internal\Hooks\ButtonHook.cs" />
     <Compile Include="Internal\Mappers\MouseMessagesTranslator.cs" />

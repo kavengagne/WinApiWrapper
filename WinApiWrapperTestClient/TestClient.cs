@@ -26,13 +26,12 @@ namespace WinApiWrapperTestClient
                 Interval = 20,
                 Enabled = true
             };
-            var mouse = new WinApiMouse();
             timer.Tick += (o, args) =>
             {
                 mousePosition.BeginInvoke(new Action(() =>
                 {
-                    var position = mouse.Position;
-                    var client = mouse.GetClientPosition(Handle);
+                    var position = WinApiMouse.Position;
+                    var client = WinApiMouse.GetClientPosition(Handle);
                     mousePosition.Text = String.Format("X: {0}, Y: {1}", position.X, position.Y);
                     clientPosition.Text = String.Format("X: {0}, Y: {1}", client.X, client.Y);
                 }));
@@ -42,7 +41,8 @@ namespace WinApiWrapperTestClient
         private void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
-            var windows = WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null);
+            var windows =
+                WinApiWindow.EnumWindows(win => (win.IsDesktopWindow || win.IsToolWindow) && win.Title != null);
             foreach (var window in windows)
             {
                 listBox1.Items.Add(window.Title);
@@ -129,27 +129,24 @@ namespace WinApiWrapperTestClient
 
         private void button9_Click(object sender, EventArgs e)
         {
-            var mouse = new WinApiMouse();
-            mouse.IsVisible = !mouse.IsVisible;
+            WinApiMouse.IsVisible = !WinApiMouse.IsVisible;
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
-            //GC.Collect();
+            GC.Collect();
             //__mouse.UnregisterAllHooks();
 
-            var mouse = new WinApiMouse();
-            mouse.PerformClick(MouseButton.Left, new Point(500, 550));
+            WinApiMouse.PerformClick(MouseButton.Left, new Point(500, 550));
         }
 
-        private WinApiMouse __mouse = new WinApiMouse();
         private void button11_Click(object sender, EventArgs e)
         {
-            //__mouse.RegisterButtonHook(MouseButtonAction.Down, button => Debug.WriteLine("Down " + button));
+            //mouse.RegisterButtonHook(MouseButtonAction.Down, button => Debug.WriteLine("Down " + button));
             //__mouse.RegisterButtonHook(MouseButtonAction.Up, button => Debug.WriteLine("Up " + button));
             //__mouse.RegisterMoveHook(point => Debug.WriteLine("Move: " + point));
-            //__mouse.RegisterWheelHook(MouseWheelOrientation.Horizontal, i => Debug.WriteLine("HWheel: " + i));
-            //__mouse.RegisterWheelHook(MouseWheelOrientation.Vertical, i => Debug.WriteLine("VWheel: " + i));
+            WinApiMouse.RegisterWheelHook(MouseWheelOrientation.Horizontal, delta => Debug.WriteLine("HWheel: " + delta));
+            //mouse.RegisterWheelHook(MouseWheelOrientation.Vertical, i => Debug.WriteLine("VWheel: " + i));
 
             RECT rect;
             User32.GetClipCursor(out rect);

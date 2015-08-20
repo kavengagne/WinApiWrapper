@@ -13,6 +13,10 @@ namespace WinApiWrapper.Native.Methods
         public static extern IntPtr SetWindowsHookEx(Enums.HookType hookType, HookProc lpfn, IntPtr hMod,
                                                      IntPtr dwThreadId);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
         [DllImport("user32", EntryPoint = "CallNextHookEx")]
         public static extern IntPtr CallNextHook(IntPtr hHook, int ncode, IntPtr wParam, IntPtr lParam);
 

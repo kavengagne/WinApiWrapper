@@ -24,9 +24,12 @@ namespace WinApiWrapper.Wrappers
         {
             get
             {
+                if (!IsVisible)
+                {
+                    return null;
+                }
                 var data = new StringBuilder(4096);
-                var messageResult = User32.SendMessage(Hwnd, (uint)WindowMessage.GETTEXT,
-                                                                     data.Capacity + 1, data);
+                var messageResult = User32.SendMessage(Hwnd, (uint)WindowMessage.GETTEXT, data.Capacity + 1, data);
                 if (messageResult != 0)
                 {
                     return data.ToString();
