@@ -4,8 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WinApiWrapper.Enums;
 using WinApiWrapper.Interfaces;
-using WinApiWrapper.Internal.Hooks;
-using WinApiWrapper.Internal.Mappers;
 using WinApiWrapper.Native.Constants;
 using WinApiWrapper.Native.Delegates;
 using WinApiWrapper.Native.Enums;
@@ -18,19 +16,19 @@ namespace WinApiWrapper.Wrappers
 {
     public static class WinApiMouse
     {
-        private static readonly MouseMessagesTranslator MessageTranslator;
-        private static readonly ConcurrentDictionary<Guid, ButtonHook> ButtonHooks;
-        private static readonly ConcurrentDictionary<Guid, MoveHook> MoveHooks;
-        private static readonly ConcurrentDictionary<Guid, WheelHook> WheelHooks;
+        private static readonly Internal.Mappers.MouseMessagesTranslator MessageTranslator;
+        private static readonly ConcurrentDictionary<Guid, Internal.Hooks.ButtonHook> ButtonHooks;
+        private static readonly ConcurrentDictionary<Guid, Internal.Hooks.MoveHook> MoveHooks;
+        private static readonly ConcurrentDictionary<Guid, Internal.Hooks.WheelHook> WheelHooks;
         private static readonly IntPtr MouseHookHandle;
 
         static WinApiMouse()
         {
-            MessageTranslator = new MouseMessagesTranslator();
+            MessageTranslator = new Internal.Mappers.MouseMessagesTranslator();
 
-            ButtonHooks = new ConcurrentDictionary<Guid, ButtonHook>();
-            MoveHooks = new ConcurrentDictionary<Guid, MoveHook>();
-            WheelHooks = new ConcurrentDictionary<Guid, WheelHook>();
+            ButtonHooks = new ConcurrentDictionary<Guid, Internal.Hooks.ButtonHook>();
+            MoveHooks = new ConcurrentDictionary<Guid, Internal.Hooks.MoveHook>();
+            WheelHooks = new ConcurrentDictionary<Guid, Internal.Hooks.WheelHook>();
 
             HookProc mouseHookProc = HookWindowProc;
             GCHandle.Alloc(mouseHookProc);
@@ -163,7 +161,7 @@ namespace WinApiWrapper.Wrappers
         #region Hooks
         public static Guid RegisterMoveHook(Action<Point> hookMethod)
         {
-            return RegisterHook(MoveHooks, new MoveHook(hookMethod));
+            return RegisterHook(MoveHooks, new Internal.Hooks.MoveHook(hookMethod));
         }
 
         public static bool UnregisterMoveHook(Guid hookGuid)
@@ -178,7 +176,7 @@ namespace WinApiWrapper.Wrappers
 
         public static Guid RegisterButtonHook(MouseButtonAction buttonAction, Action<MouseButton> hookMethod)
         {
-            return RegisterHook(ButtonHooks, new ButtonHook(buttonAction, hookMethod));
+            return RegisterHook(ButtonHooks, new Internal.Hooks.ButtonHook(buttonAction, hookMethod));
         }
 
         public static bool UnregisterButtonHook(Guid hookGuid)
@@ -193,7 +191,7 @@ namespace WinApiWrapper.Wrappers
 
         public static Guid RegisterWheelHook(MouseWheelOrientation wheelOrientation, Action<int> hookMethod)
         {
-            return RegisterHook(WheelHooks, new WheelHook(wheelOrientation, hookMethod));
+            return RegisterHook(WheelHooks, new Internal.Hooks.WheelHook(wheelOrientation, hookMethod));
         }
 
         public static bool UnregisterWheelHook(Guid hookGuid)

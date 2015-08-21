@@ -2,15 +2,21 @@
 using System.Drawing;
 
 
-namespace WinApiWrapper.Internal.Hooks
+namespace WinApiWrapper
 {
-    internal class MoveHook
+    internal partial class Internal
     {
-        public Action<Point> HookMethod { get; set; }
-
-        public MoveHook(Action<Point> hookMethod)
+        internal partial class Hooks
         {
-            HookMethod = hookMethod;
+            internal class MoveHook
+            {
+                public Action<Point> HookMethod { get; set; }
+
+                public MoveHook(Action<Point> hookMethod)
+                {
+                    HookMethod = hookMethod;
+                }
+            }
         }
     }
 }
