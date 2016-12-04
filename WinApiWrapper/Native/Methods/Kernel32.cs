@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using WinApiWrapper.Native.Enums;
 
 // ReSharper disable InconsistentNaming
 
@@ -42,6 +43,9 @@ namespace WinApiWrapper.Native.Methods
 
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr LoadLibrary(string lpFileName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hReservedNull, LoadLibraryFlags dwFlags);
 
         [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);

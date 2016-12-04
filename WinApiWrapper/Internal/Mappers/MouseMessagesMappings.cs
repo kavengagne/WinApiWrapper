@@ -12,6 +12,13 @@ namespace WinApiWrapper
         {
             internal class MouseMessagesMappings
             {
+                public Dictionary<MouseButton, Tuple<WindowMessage, WindowMessage>> MouseButtonToTupleWindowMessage { get; set; }
+                public Dictionary<MouseButton, Tuple<MouseEventF, MouseEventF>> MouseButtonToTupleMouseEventF { get; set; }
+                public Dictionary<WindowMessage, MouseButtonAction> WindowMessageToMouseButtonAction { get; set; }
+                public Dictionary<WindowMessage, MouseButton> WindowMessageToMouseButton { get; set; }
+                public Dictionary<WindowMessage, MouseWheelOrientation> WindowMessageToMouseWheelOrientation { get; set; }
+
+
                 public MouseMessagesMappings()
                 {
                     WindowMessageToMouseButton = new Dictionary<WindowMessage, MouseButton>
@@ -59,19 +66,6 @@ namespace WinApiWrapper
                         { WindowMessage.MOUSEWHEEL, MouseWheelOrientation.Vertical },
                         { WindowMessage.MOUSEHWHEEL, MouseWheelOrientation.Horizontal }
                     };
-                }
-
-                public Dictionary<MouseButton, Tuple<WindowMessage, WindowMessage>> MouseButtonToTupleWindowMessage {
-                    get; set; }
-
-                public Dictionary<MouseButton, Tuple<MouseEventF, MouseEventF>> MouseButtonToTupleMouseEventF { get;
-                    set; }
-
-                public Dictionary<WindowMessage, MouseButtonAction> WindowMessageToMouseButtonAction { get; set; }
-
-                public Dictionary<WindowMessage, MouseButton> WindowMessageToMouseButton { get; set; }
-
-                public Dictionary<WindowMessage, MouseWheelOrientation> WindowMessageToMouseWheelOrientation { get; set;
                 }
             }
         }

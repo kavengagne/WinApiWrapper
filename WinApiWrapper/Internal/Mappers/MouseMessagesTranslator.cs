@@ -10,11 +10,11 @@ namespace WinApiWrapper
         {
             internal class MouseMessagesTranslator
             {
-                private readonly Internal.Mappers.MouseMessagesMappings _mappings;
+                private readonly MouseMessagesMappings _mappings;
 
                 public MouseMessagesTranslator()
                 {
-                    _mappings = new Internal.Mappers.MouseMessagesMappings();
+                    _mappings = new MouseMessagesMappings();
                 }
 
                 public MouseButton GetMouseButton(WindowMessage message)

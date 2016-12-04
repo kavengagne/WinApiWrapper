@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using WinApiWrapper.Native.Enums;
 using WinApiWrapper.Native.Structs;
@@ -7,6 +8,9 @@ namespace WinApiWrapper.Native.Methods
 {
     public partial class User32
     {
+        [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern short GetKeyState(int keyCode);
+
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(VirtualKeys vKey);
 
@@ -33,5 +37,9 @@ namespace WinApiWrapper.Native.Methods
 
         [DllImport("user32.dll")]
         public static extern bool ClipCursor(ref RECT lpRect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
     }
 }

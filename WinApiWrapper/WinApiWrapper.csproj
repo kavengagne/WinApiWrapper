@@ -36,11 +36,18 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\KeyboardKeyAction.cs" />
     <Compile Include="Enums\MouseButton.cs" />
     <Compile Include="Enums\MouseButtonAction.cs" />
     <Compile Include="Enums\MouseWheelOrientation.cs" />
+    <Compile Include="Internal\Hooks\KeyboardKeyHook.cs" />
+    <Compile Include="Internal\Mappers\KeyboardMessagesTranslator.cs" />
+    <Compile Include="Internal\Mappers\KeyboardMessagesMappings.cs" />
+    <Compile Include="Models\KeyHook.cs" />
+    <Compile Include="Native\Enums\LoadLibraryFlags.cs" />
     <Compile Include="Native\Enums\StandardRights.cs" />
     <Compile Include="Native\Enums\FileAttributes.cs" />
     <Compile Include="Native\Enums\FileShareModes.cs" />
@@ -98,11 +105,12 @@
     <Compile Include="Native\Methods\User32.Windows.cs" />
     <Compile Include="Interfaces\IWinApiWindow.cs" />
     <Compile Include="Interfaces\IWinApiKeyboard.cs" />
-    <Compile Include="Internal\Hooks\ButtonHook.cs" />
+    <Compile Include="Internal\Hooks\MouseButtonHook.cs" />
     <Compile Include="Internal\Mappers\MouseMessagesTranslator.cs" />
     <Compile Include="Internal\Mappers\MouseMessagesMappings.cs" />
     <Compile Include="Internal\Hooks\WheelHook.cs" />
     <Compile Include="Internal\Hooks\MoveHook.cs" />
+    <Compile Include="Internal\Hooks\HookHandle.cs" />
     <Compile Include="Wrappers\WinApiKeyboard.cs" />
     <Compile Include="Wrappers\WinApiMouse.cs" />
     <Compile Include="Wrappers\WinApiWindow.Methods.cs" />

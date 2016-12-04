@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using WinApiWrapper.Enums;
@@ -9,7 +10,6 @@ using WinApiWrapper.Native.Delegates;
 using WinApiWrapper.Native.Enums;
 using WinApiWrapper.Native.Methods;
 using WinApiWrapper.Native.Structs;
-using Point = System.Drawing.Point;
 
 
 namespace WinApiWrapper.Wrappers
@@ -17,22 +17,20 @@ namespace WinApiWrapper.Wrappers
     public static class WinApiMouse
     {
         private static readonly Internal.Mappers.MouseMessagesTranslator MessageTranslator;
-        private static readonly ConcurrentDictionary<Guid, Internal.Hooks.ButtonHook> ButtonHooks;
-        private static readonly ConcurrentDictionary<Guid, Internal.Hooks.MoveHook> MoveHooks;
+        private static readonly ConcurrentDictionary<Guid, Internal.Hooks.MouseButtonHook> ButtonHooks;
+        //private static readonly ConcurrentDictionary<Guid, Internal.Hooks.MoveHook> MoveHooks;
         private static readonly ConcurrentDictionary<Guid, Internal.Hooks.WheelHook> WheelHooks;
-        private static readonly IntPtr MouseHookHandle;
+        private static readonly HookHandle MouseHookHandle;
 
         static WinApiMouse()
         {
             MessageTranslator = new Internal.Mappers.MouseMessagesTranslator();
 
-            ButtonHooks = new ConcurrentDictionary<Guid, Internal.Hooks.ButtonHook>();
-            MoveHooks = new ConcurrentDictionary<Guid, Internal.Hooks.MoveHook>();
+            ButtonHooks = new ConcurrentDictionary<Guid, Internal.Hooks.MouseButtonHook>();
+            //MoveHooks = new ConcurrentDictionary<Guid, Internal.Hooks.MoveHook>();
             WheelHooks = new ConcurrentDictionary<Guid, Internal.Hooks.WheelHook>();
 
-            HookProc mouseHookProc = HookWindowProc;
-            GCHandle.Alloc(mouseHookProc);
-            MouseHookHandle = User32.SetWindowsHookEx(HookType.WH_MOUSE_LL, mouseHookProc, IntPtr.Zero, IntPtr.Zero);
+            MouseHookHandle = new HookHandle(HookType.WH_MOUSE_LL, HookWindowProc);
         }
 
 
@@ -159,24 +157,24 @@ namespace WinApiWrapper.Wrappers
 
 
         #region Hooks
-        public static Guid RegisterMoveHook(Action<Point> hookMethod)
-        {
-            return RegisterHook(MoveHooks, new Internal.Hooks.MoveHook(hookMethod));
-        }
+        //public static Guid RegisterMoveHook(Action<Point> hookMethod)
+        //{
+        //    return RegisterHook(MoveHooks, new Internal.Hooks.MoveHook(hookMethod));
+        //}
 
-        public static bool UnregisterMoveHook(Guid hookGuid)
-        {
-            return UnregisterHook(MoveHooks, hookGuid);
-        }
+        //public static bool UnregisterMoveHook(Guid hookGuid)
+        //{
+        //    return UnregisterHook(MoveHooks, hookGuid);
+        //}
 
-        public static void UnregisterAllMoveHooks()
-        {
-            MoveHooks.Clear();
-        }
+        //public static void UnregisterAllMoveHooks()
+        //{
+        //    MoveHooks.Clear();
+        //}
 
         public static Guid RegisterButtonHook(MouseButtonAction buttonAction, Action<MouseButton> hookMethod)
         {
-            return RegisterHook(ButtonHooks, new Internal.Hooks.ButtonHook(buttonAction, hookMethod));
+            return RegisterHook(ButtonHooks, new Internal.Hooks.MouseButtonHook(buttonAction, hookMethod));
         }
 
         public static bool UnregisterButtonHook(Guid hookGuid)
@@ -206,7 +204,7 @@ namespace WinApiWrapper.Wrappers
 
         public static void UnregisterAllHooks()
         {
-            UnregisterAllMoveHooks();
+            //UnregisterAllMoveHooks();
             UnregisterAllButtonHooks();
             UnregisterAllWheelHooks();
         }
@@ -218,11 +216,11 @@ namespace WinApiWrapper.Wrappers
         {
             if (code >= 0)
             {
-                if (IsMoveMessage(wparam))
-                {
-                    InvokeMoveHooks(wparam, lparam);
-                }
-                else if (IsWheelMessage(wparam))
+                //if (IsMoveMessage(wparam))
+                //{
+                //    InvokeMoveHooks(wparam, lparam);
+                //}
+                if (IsWheelMessage(wparam))
                 {
                     InvokeWheelHooks(wparam, lparam);
                 }
@@ -250,16 +248,16 @@ namespace WinApiWrapper.Wrappers
             return hookList.TryRemove(hookGuid, out removedHook);
         }
 
-        private static void InvokeMoveHooks(IntPtr wparam, IntPtr lparam)
-        {
-            var mouseHookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lparam, typeof(MSLLHOOKSTRUCT));
-            var mousePosition = new Point(mouseHookStruct.pt.x, mouseHookStruct.pt.y);
+        //private static void InvokeMoveHooks(IntPtr wparam, IntPtr lparam)
+        //{
+        //    var mouseHookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lparam, typeof(MSLLHOOKSTRUCT));
+        //    var mousePosition = new Point(mouseHookStruct.pt.x, mouseHookStruct.pt.y);
 
-            foreach (var moveHook in MoveHooks.Values)
-            {
-                moveHook.HookMethod?.Invoke(mousePosition);
-            }
-        }
+        //    foreach (var moveHook in MoveHooks.Values)
+        //    {
+        //        moveHook.HookMethod?.Invoke(mousePosition);
+        //    }
+        //}
 
         private static void InvokeWheelHooks(IntPtr wparam, IntPtr lparam)
         {
@@ -316,11 +314,11 @@ namespace WinApiWrapper.Wrappers
             return message == WindowMessage.MOUSEWHEEL || message == WindowMessage.MOUSEHWHEEL;
         }
 
-        private static bool IsMoveMessage(IntPtr wparam)
-        {
-            var message = (WindowMessage)wparam;
-            return message == WindowMessage.MOUSEMOVE;
-        }
+        //private static bool IsMoveMessage(IntPtr wparam)
+        //{
+        //    var message = (WindowMessage)wparam;
+        //    return message == WindowMessage.MOUSEMOVE;
+        //}
         #endregion Private Methods
     }
 }

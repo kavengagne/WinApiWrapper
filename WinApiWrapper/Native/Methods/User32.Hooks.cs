@@ -10,8 +10,7 @@ namespace WinApiWrapper.Native.Methods
     public partial class User32
     {
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr SetWindowsHookEx(Enums.HookType hookType, HookProc lpfn, IntPtr hMod,
-                                                     IntPtr dwThreadId);
+        public static extern IntPtr SetWindowsHookEx(HookType hookType, HookProc lpfn, IntPtr hMod, IntPtr dwThreadId);
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -31,11 +30,11 @@ namespace WinApiWrapper.Native.Methods
         public static extern bool UnhookWinEvent(IntPtr eventHookHandle);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr CallNextHookEx(SafeHandle hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
         // overload for use with LowLevelKeyboardProc
         [DllImport("user32.dll")]
-        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, WindowMessage wParam, [In]KBDLLHOOKSTRUCT lParam);
+        public static extern IntPtr CallNextHookEx(SafeHandle hhk, int nCode, WindowMessage wParam, [In]KBDLLHOOKSTRUCT lParam);
 
         // overload for use with LowLevelMouseProc
         [DllImport("user32.dll")]

@@ -1,10 +1,9 @@
 ﻿namespace WinApiWrapper.Enums
 {
-    public enum MouseButtonAction
+    public enum KeyboardKeyAction
     {
         None,
         Down,
-        Up,
-        DoubleClick
+        Up
     }
 }

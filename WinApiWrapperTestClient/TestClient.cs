@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WinApiWrapper.Enums;
+using WinApiWrapper.Native.Enums;
 using WinApiWrapper.Native.Methods;
 using WinApiWrapper.Native.Structs;
 using WinApiWrapper.Wrappers;
@@ -145,7 +146,7 @@ namespace WinApiWrapperTestClient
             //mouse.RegisterButtonHook(MouseButtonAction.Down, button => Debug.WriteLine("Down " + button));
             //__mouse.RegisterButtonHook(MouseButtonAction.Up, button => Debug.WriteLine("Up " + button));
             //__mouse.RegisterMoveHook(point => Debug.WriteLine("Move: " + point));
-            WinApiMouse.RegisterWheelHook(MouseWheelOrientation.Horizontal, delta => Debug.WriteLine("HWheel: " + delta));
+            //WinApiMouse.RegisterWheelHook(MouseWheelOrientation.Horizontal, delta => Debug.WriteLine("HWheel: " + delta));
             //mouse.RegisterWheelHook(MouseWheelOrientation.Vertical, i => Debug.WriteLine("VWheel: " + i));
 
             RECT rect;

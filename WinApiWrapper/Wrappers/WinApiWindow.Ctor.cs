@@ -10,5 +10,15 @@ namespace WinApiWrapper.Wrappers
         {
             Hwnd = hwnd;
         }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as WinApiWindow;
+            if (other != null)
+            {
+                return other.Hwnd == Hwnd;
+            }
+            return false;
+        }
     }
 }
