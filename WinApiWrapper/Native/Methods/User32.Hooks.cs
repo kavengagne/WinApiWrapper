@@ -32,12 +32,18 @@ namespace WinApiWrapper.Native.Methods
         [DllImport("user32.dll")]
         public static extern IntPtr CallNextHookEx(SafeHandle hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
-        // overload for use with LowLevelKeyboardProc
         [DllImport("user32.dll")]
         public static extern IntPtr CallNextHookEx(SafeHandle hhk, int nCode, WindowMessage wParam, [In]KBDLLHOOKSTRUCT lParam);
 
-        // overload for use with LowLevelMouseProc
         [DllImport("user32.dll")]
         public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, WindowMessage wParam, [In]MSLLHOOKSTRUCT lParam);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AddClipboardFormatListener(IntPtr hwnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
     }
 }

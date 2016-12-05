@@ -15,6 +15,8 @@ namespace WinApiWrapper.Wrappers
         private readonly ConcurrentDictionary<Guid, Internal.Hooks.KeyboardHookBase> _keyHooks;
         private readonly HookHandle _keyboardHookHandle;
 
+        private const int KeyChordDelayMilliseconds = 1000;
+
 
         public WinApiKeyboard()
         {
@@ -31,7 +33,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public Guid RegisterKeyHook(Action hookMethod, KeyHook keyHook)
         {
-            return RegisterKeyHook(hookMethod, new KeyChord(keyHook));
+            return RegisterKeyHook(hookMethod, new KeyChord(new[] { keyHook }, KeyChordDelayMilliseconds));
         }
         
         /// <summary>
@@ -49,7 +51,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public Guid RegisterKeyHook(Action hookMethod, IList<KeyHook> keyHooks)
         {
-            return RegisterKeyHook(hookMethod, new KeyChord(keyHooks));
+            return RegisterKeyHook(hookMethod, new KeyChord(keyHooks, KeyChordDelayMilliseconds));
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace WinApiWrapper.Wrappers
         /// </summary>
         public Guid RegisterKeyHook(Action hookMethod, params KeyHook[] keyHooks)
         {
-            return RegisterKeyHook(hookMethod, new KeyChord(keyHooks));
+            return RegisterKeyHook(hookMethod, new KeyChord(keyHooks, KeyChordDelayMilliseconds));
         }
 
         /// <summary>

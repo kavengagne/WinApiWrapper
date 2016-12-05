@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinApiWrapper.Enums;
@@ -23,12 +24,13 @@ namespace WinApiWrapper
                 {
                     if (CanInvoke(action, modifiers, key))
                     {
+                        Debug.WriteLine("Invoking method for Action: {0}, Modifiers: {1}, Key: {2}", action, modifiers, key);
                         Task.Run((Action)Invoke);
                         return true;
                     }
                     return false;
                 }
-                
+
                 protected abstract bool CanInvoke(KeyboardKeyAction action, Keys modifiers, Keys key);
 
                 protected virtual void Invoke()
