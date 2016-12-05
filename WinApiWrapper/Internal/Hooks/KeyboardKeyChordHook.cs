@@ -11,18 +11,18 @@ namespace WinApiWrapper
     {
         internal partial class Hooks
         {
-            internal class KeyboardKeyHook : KeyboardHookBase
+            internal class KeyboardKeyChordHook : KeyboardHookBase
             {
-                internal KeyHook KeyHook { get; set; }
+                internal KeyChord KeyChord { get; set; }
 
-                internal KeyboardKeyHook(KeyHook keyHook, Action hookMethod) : base(hookMethod)
+                internal KeyboardKeyChordHook(KeyChord keyChord, Action hookMethod) : base(hookMethod)
                 {
-                    KeyHook = keyHook;
+                    KeyChord = keyChord;
                 }
 
                 protected override bool CanInvoke(KeyboardKeyAction action, Keys modifiers, Keys key)
                 {
-                    return !WinApiKeyboard.IsModifier(key) && KeyHook.CanTrigger(action, modifiers, key);
+                    return !WinApiKeyboard.IsModifier(key) && KeyChord.TrySatisfy(action, modifiers, key);
                 }
             }
         }

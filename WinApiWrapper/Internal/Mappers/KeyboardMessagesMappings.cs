@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using WinApiWrapper.Enums;
 using WinApiWrapper.Native.Enums;
@@ -12,10 +11,9 @@ namespace WinApiWrapper
         {
             internal class KeyboardMessagesMappings
             {
-                public Dictionary<WindowMessage, KeyboardKeyAction> WindowMessageToKeyboardKeyAction { get; set; }
+                internal Dictionary<WindowMessage, KeyboardKeyAction> WindowMessageToKeyboardKeyAction { get; set; }
 
-
-                public KeyboardMessagesMappings()
+                internal KeyboardMessagesMappings()
                 {
                     WindowMessageToKeyboardKeyAction = new Dictionary<WindowMessage, KeyboardKeyAction>
                     {

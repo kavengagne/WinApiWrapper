@@ -12,14 +12,14 @@ namespace WinApiWrapper
         {
             internal class MouseMessagesMappings
             {
-                public Dictionary<MouseButton, Tuple<WindowMessage, WindowMessage>> MouseButtonToTupleWindowMessage { get; set; }
-                public Dictionary<MouseButton, Tuple<MouseEventF, MouseEventF>> MouseButtonToTupleMouseEventF { get; set; }
-                public Dictionary<WindowMessage, MouseButtonAction> WindowMessageToMouseButtonAction { get; set; }
-                public Dictionary<WindowMessage, MouseButton> WindowMessageToMouseButton { get; set; }
-                public Dictionary<WindowMessage, MouseWheelOrientation> WindowMessageToMouseWheelOrientation { get; set; }
+                internal Dictionary<MouseButton, Tuple<WindowMessage, WindowMessage>> MouseButtonToTupleWindowMessage { get; set; }
+                internal Dictionary<MouseButton, Tuple<MouseEventF, MouseEventF>> MouseButtonToTupleMouseEventF { get; set; }
+                internal Dictionary<WindowMessage, MouseButtonAction> WindowMessageToMouseButtonAction { get; set; }
+                internal Dictionary<WindowMessage, MouseButton> WindowMessageToMouseButton { get; set; }
+                internal Dictionary<WindowMessage, MouseWheelOrientation> WindowMessageToMouseWheelOrientation { get; set; }
 
 
-                public MouseMessagesMappings()
+                internal MouseMessagesMappings()
                 {
                     WindowMessageToMouseButton = new Dictionary<WindowMessage, MouseButton>
                     {

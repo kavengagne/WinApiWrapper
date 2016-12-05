@@ -21,7 +21,7 @@ namespace WinApiWrapper
 
         protected override bool ReleaseHandle()
         {
-            return User32.UnhookWindowsHookEx(handle);
+            return IsInvalid || User32.UnhookWindowsHookEx(handle);
         }
 
         public override bool IsInvalid { get; }

@@ -15,12 +15,12 @@ namespace WinApiWrapper
             {
                 private readonly KeyboardMessagesMappings _mappings;
 
-                public KeyboardMessagesTranslator()
+                internal KeyboardMessagesTranslator()
                 {
                     _mappings = new KeyboardMessagesMappings();
                 }
 
-                public KeyboardKeyAction GetKeyboardKeyAction(WindowMessage message)
+                internal KeyboardKeyAction GetKeyboardKeyAction(WindowMessage message)
                 {
                     KeyboardKeyAction action;
                     if (!_mappings.WindowMessageToKeyboardKeyAction.TryGetValue(message, out action))
@@ -30,7 +30,7 @@ namespace WinApiWrapper
                     return action;
                 }
 
-                public Keys GetKeyboardKey(IntPtr lparam)
+                internal Keys GetKeyboardKey(IntPtr lparam)
                 {
                     var kbHookStruct = (KBDLLHOOKSTRUCT)Marshal.PtrToStructure(lparam, typeof(KBDLLHOOKSTRUCT));
                     Keys key;

@@ -10,9 +10,9 @@ namespace WinApiWrapper
         {
             internal class MoveHook
             {
-                public Action<Point> HookMethod { get; set; }
+                internal Action<Point> HookMethod { get; set; }
 
-                public MoveHook(Action<Point> hookMethod)
+                internal MoveHook(Action<Point> hookMethod)
                 {
                     HookMethod = hookMethod;
                 }

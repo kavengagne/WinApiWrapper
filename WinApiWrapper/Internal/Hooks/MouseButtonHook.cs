@@ -10,10 +10,10 @@ namespace WinApiWrapper
         {
             internal class MouseButtonHook
             {
-                public MouseButtonAction ButtonAction { get; set; }
-                public Action<MouseButton> HookMethod { get; set; }
+                internal MouseButtonAction ButtonAction { get; set; }
+                internal Action<MouseButton> HookMethod { get; set; }
 
-                public MouseButtonHook(MouseButtonAction buttonAction, Action<MouseButton> hookMethod)
+                internal MouseButtonHook(MouseButtonAction buttonAction, Action<MouseButton> hookMethod)
                 {
                     ButtonAction = buttonAction;
                     HookMethod = hookMethod;

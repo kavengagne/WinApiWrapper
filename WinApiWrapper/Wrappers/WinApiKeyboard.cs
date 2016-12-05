@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using WinApiWrapper.Enums;
 using WinApiWrapper.Models;
 using WinApiWrapper.Native.Enums;
 using WinApiWrapper.Native.Methods;
@@ -10,48 +9,82 @@ using WinApiWrapper.Native.Methods;
 
 namespace WinApiWrapper.Wrappers
 {
-    public class WinApiKeyboard
+    public class WinApiKeyboard : IDisposable
     {
         private readonly Internal.Mappers.KeyboardMessagesTranslator _messageTranslator;
-        private readonly ConcurrentDictionary<Guid, Internal.Hooks.KeyboardKeyHook> _keyHooks;
+        private readonly ConcurrentDictionary<Guid, Internal.Hooks.KeyboardHookBase> _keyHooks;
         private readonly HookHandle _keyboardHookHandle;
 
 
         public WinApiKeyboard()
         {
             _messageTranslator = new Internal.Mappers.KeyboardMessagesTranslator();
-            _keyHooks = new ConcurrentDictionary<Guid, Internal.Hooks.KeyboardKeyHook>();
+            _keyHooks = new ConcurrentDictionary<Guid, Internal.Hooks.KeyboardHookBase>();
             _keyboardHookHandle = new HookHandle(HookType.WH_KEYBOARD_LL, HookWindowProc);
         }
 
 
         #region Hooks
-        public Guid RegisterKeyHook(KeyboardKeyAction keyAction, Action<Keys> hookMethod)
+        /// <summary>
+        /// Registers a hook which invokes the <paramref name="hookMethod"/> when the
+        /// specified <paramref name="keyHook"/> is detected.
+        /// </summary>
+        public Guid RegisterKeyHook(Action hookMethod, KeyHook keyHook)
         {
-            return RegisterHook(_keyHooks, new Internal.Hooks.KeyboardKeyHook(keyAction, hookMethod));
+            return RegisterKeyHook(hookMethod, new KeyChord(keyHook));
+        }
+        
+        /// <summary>
+        /// Registers a hook which invokes the <paramref name="hookMethod"/> when the
+        /// specified <paramref name="keyChord"/> is satisfied.
+        /// </summary>
+        public Guid RegisterKeyHook(Action hookMethod, KeyChord keyChord)
+        {
+            return RegisterHook(_keyHooks, new Internal.Hooks.KeyboardKeyChordHook(keyChord, hookMethod));
         }
 
-        public Guid RegisterKeyHook(KeyHook keyHook, Action<Keys> hookMethod)
+        /// <summary>
+        /// Registers a hook which invokes the <paramref name="hookMethod"/> when the
+        /// <c>KeyChord</c> created by the specified list of <c>KeyHook</c> is satisfied.
+        /// </summary>
+        public Guid RegisterKeyHook(Action hookMethod, IList<KeyHook> keyHooks)
         {
-            return RegisterHook(_keyHooks, new Internal.Hooks.KeyboardKeyHook(keyHook.Action,
-                key => InvokeKeySpecificHook(key, keyHook, hookMethod)));
+            return RegisterKeyHook(hookMethod, new KeyChord(keyHooks));
         }
 
+        /// <summary>
+        /// Registers a hook which invokes the <paramref name="hookMethod"/> when the
+        /// <c>KeyChord</c> created by the specified array of <c>KeyHook</c> is satisfied.
+        /// </summary>
+        public Guid RegisterKeyHook(Action hookMethod, params KeyHook[] keyHooks)
+        {
+            return RegisterKeyHook(hookMethod, new KeyChord(keyHooks));
+        }
+
+        /// <summary>
+        /// Unregisters an existing hook based on its <c>Guid</c>.
+        /// </summary>
         public bool UnregisterKeyHook(Guid hookGuid)
         {
             return UnregisterHook(_keyHooks, hookGuid);
         }
 
-        public void UnregisterAllKeyHooks()
+        /// <summary>
+        /// Unregisters all existing hooks.
+        /// </summary>
+        public void UnregisterAllHooks()
         {
             _keyHooks.Clear();
         }
 
-        public void UnregisterAllHooks()
-        {
-            UnregisterAllKeyHooks();
-        }
+        /// <summary>
+        /// Returns the current number of hooks.
+        /// </summary>
+        public int HooksCount => _keyHooks.Count;
 
+        /// <summary>
+        /// Returns the current state of the modifier keys (Ctrl, Shift, Alt).
+        /// </summary>
         public static Keys ModifierKeys
         {
             get
@@ -63,19 +96,29 @@ namespace WinApiWrapper.Wrappers
                 return modifiers;
             }
         }
+
+        /// <summary>
+        /// Returns true if the <paramref name="key"/> is a modifier.
+        /// </summary>
+        /// <param name="key">The key to verify</param>
+        /// <returns>Returns true if the <paramref name="key"/> is a modifier</returns>
+        public static bool IsModifier(Keys key)
+        {
+            return key == Keys.ControlKey || key == Keys.Menu || key == Keys.ShiftKey ||
+                   key == Keys.LControlKey || key == Keys.RControlKey ||
+                   key == Keys.LMenu || key == Keys.RMenu ||
+                   key == Keys.LShiftKey || key == Keys.RShiftKey;
+        }
         #endregion Hooks
 
 
         #region Hook Procedure
         private IntPtr HookWindowProc(int code, IntPtr wparam, IntPtr lparam)
         {
-            if (code >= 0)
+            var message = (WindowMessage)wparam;
+            if (code >= 0 && IsButtonMessage(message))
             {
-                var key = _messageTranslator.GetKeyboardKey(lparam);
-                if (IsButtonMessage(wparam) && !IsModifier(key))
-                {
-                    InvokeHooksInternal((WindowMessage)wparam, key);
-                }
+                TryInvokeHooksInternal(message, lparam);
             }
             return User32.CallNextHookEx(_keyboardHookHandle, code, wparam, lparam);
         }
@@ -83,26 +126,18 @@ namespace WinApiWrapper.Wrappers
 
 
         #region Private Methods
-        private void InvokeHooksInternal(WindowMessage message, Keys key)
+        private void TryInvokeHooksInternal(WindowMessage message, IntPtr lparam)
         {
+            var key = _messageTranslator.GetKeyboardKey(lparam);
             var action = _messageTranslator.GetKeyboardKeyAction(message);
-            foreach (var hook in _keyHooks.Values.Where(hook => hook.KeyAction == action))
+            foreach (var hook in _keyHooks.Values)
             {
-                hook.HookMethod?.Invoke(key);
+                hook.TryInvoke(action, ModifierKeys, key);
             }
         }
 
-        private static void InvokeKeySpecificHook(Keys key, KeyHook keyHook, Action<Keys> hookMethod)
+        private static bool IsButtonMessage(WindowMessage message)
         {
-            if (HasRequiredModifiers(keyHook.Modifiers) && key == keyHook.Key)
-            {
-                hookMethod.Invoke(key);
-            }
-        }
-
-        private static bool IsButtonMessage(IntPtr wparam)
-        {
-            var message = (WindowMessage)wparam;
             switch (message)
             {
                 case WindowMessage.KEYDOWN:
@@ -111,19 +146,6 @@ namespace WinApiWrapper.Wrappers
                 default:
                     return false;
             }
-        }
-
-        private static bool IsModifier(Keys key)
-        {
-            return key == Keys.ControlKey || key == Keys.Menu || key == Keys.ShiftKey ||
-                   key == Keys.LControlKey || key == Keys.RControlKey ||
-                   key == Keys.LMenu || key == Keys.RMenu ||
-                   key == Keys.LShiftKey || key == Keys.RShiftKey;
-        }
-
-        private static bool HasRequiredModifiers(Keys modifiers)
-        {
-            return modifiers == Keys.None || ModifierKeys.HasFlag(modifiers);
         }
 
         private static Guid RegisterHook<THook>(ConcurrentDictionary<Guid, THook> hookList, THook hook)
@@ -139,5 +161,12 @@ namespace WinApiWrapper.Wrappers
             return hookList.TryRemove(hookGuid, out removedHook);
         }
         #endregion Private Methods
+
+
+        public void Dispose()
+        {
+            UnregisterAllHooks();
+            _keyboardHookHandle.Dispose();
+        }
     }
 }

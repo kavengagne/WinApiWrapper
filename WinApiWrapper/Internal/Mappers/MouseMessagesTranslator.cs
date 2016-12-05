@@ -12,12 +12,12 @@ namespace WinApiWrapper
             {
                 private readonly MouseMessagesMappings _mappings;
 
-                public MouseMessagesTranslator()
+                internal MouseMessagesTranslator()
                 {
                     _mappings = new MouseMessagesMappings();
                 }
 
-                public MouseButton GetMouseButton(WindowMessage message)
+                internal MouseButton GetMouseButton(WindowMessage message)
                 {
                     MouseButton button;
                     if (!_mappings.WindowMessageToMouseButton.TryGetValue(message, out button))
@@ -27,7 +27,7 @@ namespace WinApiWrapper
                     return button;
                 }
 
-                public MouseButtonAction GetMouseButtonAction(WindowMessage message)
+                internal MouseButtonAction GetMouseButtonAction(WindowMessage message)
                 {
                     MouseButtonAction action;
                     if (!_mappings.WindowMessageToMouseButtonAction.TryGetValue(message, out action))
@@ -37,21 +37,21 @@ namespace WinApiWrapper
                     return action;
                 }
 
-                public MouseWheelOrientation GetWheelOrientation(WindowMessage message)
+                internal MouseWheelOrientation GetWheelOrientation(WindowMessage message)
                 {
                     MouseWheelOrientation orientation;
                     _mappings.WindowMessageToMouseWheelOrientation.TryGetValue(message, out orientation);
                     return orientation;
                 }
 
-                public Tuple<MouseEventF, MouseEventF> GetMouseEventFSequence(MouseButton mouseButton)
+                internal Tuple<MouseEventF, MouseEventF> GetMouseEventFSequence(MouseButton mouseButton)
                 {
                     Tuple<MouseEventF, MouseEventF> sequence;
                     _mappings.MouseButtonToTupleMouseEventF.TryGetValue(mouseButton, out sequence);
                     return sequence;
                 }
 
-                public Tuple<WindowMessage, WindowMessage> GetWindowMessageSequence(MouseButton mouseButton)
+                internal Tuple<WindowMessage, WindowMessage> GetWindowMessageSequence(MouseButton mouseButton)
                 {
                     Tuple<WindowMessage, WindowMessage> sequence;
                     _mappings.MouseButtonToTupleWindowMessage.TryGetValue(mouseButton, out sequence);
