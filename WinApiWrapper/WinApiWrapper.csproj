@@ -81,6 +81,7 @@
     <Compile Include="Native\Methods\User32.Hooks.cs" />
     <Compile Include="Native\Methods\User32.Core.cs" />
     <Compile Include="Native\Methods\User32.Inputs.cs" />
+    <Compile Include="Native\Structs\COPYDATASTRUCT.cs" />
     <Compile Include="Native\Structs\CURSORINFO.cs" />
     <Compile Include="Native\Structs\HARDWAREINPUT.cs" />
     <Compile Include="Native\Structs\INPUT.cs" />

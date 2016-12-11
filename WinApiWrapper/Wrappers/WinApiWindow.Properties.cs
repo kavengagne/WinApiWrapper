@@ -15,7 +15,7 @@ namespace WinApiWrapper.Wrappers
         /// <summary>
         /// A handle to the window.
         /// </summary>
-        public IntPtr Hwnd { get; private set; }
+        public IntPtr Hwnd { get; }
 
         /// <summary>
         /// The title of the window.

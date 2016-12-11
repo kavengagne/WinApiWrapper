@@ -20,5 +20,10 @@ namespace WinApiWrapper.Wrappers
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return Hwnd.GetHashCode();
+        }
     }
 }
