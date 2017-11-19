@@ -9,7 +9,7 @@ using WinApiWrapper.Native.Methods;
 
 namespace WinApiWrapper.Wrappers
 {
-    public partial class WinApiWindow
+    public partial class WinApiWindow : IWinApiWindow
     {
         public static IEnumerable<IWinApiWindow> EnumWindows(Predicate<IWinApiWindow> condition = null)
         {

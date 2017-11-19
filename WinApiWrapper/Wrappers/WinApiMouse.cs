@@ -30,7 +30,7 @@ namespace WinApiWrapper.Wrappers
             //MoveHooks = new ConcurrentDictionary<Guid, Internal.Hooks.MoveHook>();
             WheelHooks = new ConcurrentDictionary<Guid, Internal.Hooks.WheelHook>();
 
-            MouseHookHandle = new HookHandle(HookType.WH_MOUSE_LL, HookWindowProc);
+            //MouseHookHandle = new HookHandle(HookType.WH_MOUSE_LL, HookWindowProc);
         }
 
 

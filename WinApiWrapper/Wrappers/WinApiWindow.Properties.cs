@@ -10,7 +10,7 @@ using WinApiWrapper.Native.Structs;
 
 namespace WinApiWrapper.Wrappers
 {
-    public sealed partial class WinApiWindow
+    public sealed partial class WinApiWindow : IWinApiWindow
     {
         /// <summary>
         /// A handle to the window.
@@ -159,7 +159,7 @@ namespace WinApiWrapper.Wrappers
         public bool IsDesktopWindow => !HasParent && !IsToolWindow && IsVisible;
 
         /// <summary>
-        /// Indicates if the windows is a tool window.
+        /// Indicates if the window is a tool window.
         /// </summary>
         public bool IsToolWindow
         {
@@ -182,6 +182,25 @@ namespace WinApiWrapper.Wrappers
                     newStyle = windowStyles & (uint)~WindowStylesEx.WS_EX_TOOLWINDOW;
                 }
                 User32.SetWindowLong(Hwnd, GetWindowLong.GWL_EXSTYLE, (int)newStyle);
+            }
+        }
+
+        /// <summary>
+        /// Indicates if the window is minimized (iconic).
+        /// </summary>
+        public bool IsMinimized
+        {
+            get { return User32.IsIconic(Hwnd); }
+            set
+            {
+                if (value)
+                {
+                    Minimize();
+                }
+                else
+                {
+                    Restore();
+                }
             }
         }
     }

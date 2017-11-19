@@ -22,7 +22,7 @@ namespace WinApiWrapper.Interfaces
         bool IsVisible { get; set; }
         bool IsDesktopWindow { get; }
         bool IsToolWindow { get; set; }
-
+        bool IsMinimized { get; set; }
 
         //========== Methods ==========
         void Show();
@@ -32,6 +32,8 @@ namespace WinApiWrapper.Interfaces
         void BringToTop();
 
         void Minimize();
+
+        void Restore();
 
         void Close();
 

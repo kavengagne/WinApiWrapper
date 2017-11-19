@@ -7,7 +7,7 @@ using WinApiWrapper.Native.Methods;
 
 namespace WinApiWrapper.Wrappers
 {
-    public partial class WinApiWindow
+    public partial class WinApiWindow : IWinApiWindow
     {
         /// <summary>
         /// Shows the window.
@@ -40,6 +40,14 @@ namespace WinApiWrapper.Wrappers
         public void Minimize()
         {
             User32.CloseWindow(Hwnd);
+        }
+
+        /// <summary>
+        /// Restores the specified window.
+        /// </summary>
+        public void Restore()
+        {
+            User32.ShowWindow(Hwnd, ShowWindowCommands.Restore);
         }
 
         /// <summary>
